@@ -21,8 +21,8 @@ public class XsoupTest {
 	@Test
 	public void testSelect() {
 
-        String html = "<html><div><a href='https://github.com'>github.com</a></div>" +
-                "<table><tr><td>a</td><td>b</td></tr></table></html>";
+		String html = "<html><div><a href='https://github.com'>github.com</a></div>"
+				+ "<table><tr><td>a</td><td>b</td></tr></table></html>";
 
 		Document document = Jsoup.parse(html);
 
@@ -66,12 +66,8 @@ public class XsoupTest {
 		assertThat(result).isNull();
 
 		result = Xsoup.select(document, "//div[@id=test]").get();
-        String expectedDiv = "<div id=\"test\">\n" +
-                " aaa\n" +
-                " <div>\n" +
-                "  <a href=\"https://github.com\">github.com</a>\n" +
-                " </div>\n" +
-                "</div>";
+		String expectedDiv = "<div id=\"test\">\n" + " aaa\n" + " <div>\n"
+				+ "  <a href=\"https://github.com\">github.com</a>\n" + " </div>\n" + "</div>";
 		assertThat(result).isEqualTo(expectedDiv);
 
 		result = Xsoup.select(document, "//div[@id='test']").get();
@@ -86,11 +82,8 @@ public class XsoupTest {
 		Document document = Jsoup.parse(htmlClass);
 
 		String result = Xsoup.select(document, "//div[@class=a]").get();
-        assertThat(result).isEqualTo("<div class=\"a b c\">\n" +
-                " <div>\n" +
-                "  <a href=\"https://github.com\">github.com</a>\n" +
-                " </div>\n" +
-                "</div>");
+		assertThat(result).isEqualTo("<div class=\"a b c\">\n" + " <div>\n"
+				+ "  <a href=\"https://github.com\">github.com</a>\n" + " </div>\n" + "</div>");
 
 		result = Xsoup.select(document, "//div[@class=d]").get();
 		assertThat(result).isNull();
@@ -103,16 +96,11 @@ public class XsoupTest {
 		Document document = Jsoup.parse(htmlClass);
 
 		String result = Xsoup.select(document, "//body/div[1]").get();
-        assertThat(result).isEqualTo("<div class=\"a b c\">\n" +
-                " <div>\n" +
-                "  <a href=\"https://github.com\">github.com</a>\n" +
-                " </div>\n" +
-                "</div>");
+		assertThat(result).isEqualTo("<div class=\"a b c\">\n" + " <div>\n"
+				+ "  <a href=\"https://github.com\">github.com</a>\n" + " </div>\n" + "</div>");
 
 		result = Xsoup.select(document, "//body/div[2]").get();
-        assertThat(result).isEqualTo("<div>\n" +
-                " b\n" +
-                "</div>");
+		assertThat(result).isEqualTo("<div>\n" + " b\n" + "</div>");
 
 		String htmlSVG = "<div><svg>1</svg><svg>2</svg></div>";
 		result = Xsoup.select(htmlSVG, "//div/svg[1]/text()").get();
@@ -133,9 +121,7 @@ public class XsoupTest {
 		assertThat(result).isEqualTo("github.com");
 
 		result = Xsoup.select(document, "//div[@class=a]/html()").get();
-        assertThat(result).isEqualTo("<div>\n" +
-                " <a href=\"https://github.com\">github.com</a>\n" +
-                "</div>");
+		assertThat(result).isEqualTo("<div>\n" + " <a href=\"https://github.com\">github.com</a>\n" + "</div>");
 
 	}
 
@@ -148,14 +134,10 @@ public class XsoupTest {
 		assertThat(result).isEqualTo("https://github.com");
 
 		result = Xsoup.select(document, "//*[@class=a]/html()").get();
-        assertThat(result).isEqualTo("<div>\n" +
-                " <a href=\"https://github.com\">github.com</a>\n" +
-                "</div>");
+		assertThat(result).isEqualTo("<div>\n" + " <a href=\"https://github.com\">github.com</a>\n" + "</div>");
 
 		List<String> list = Xsoup.select(document, "//*[@*]/html()").list();
-        assertThat(list.get(0)).isEqualTo("<div>\n" +
-                " <a href=\"https://github.com\">github.com</a>\n" +
-                "</div>");
+		assertThat(list.get(0)).isEqualTo("<div>\n" + " <a href=\"https://github.com\">github.com</a>\n" + "</div>");
 		assertThat(list.get(1)).isEqualTo("github.com");
 	}
 
@@ -219,12 +201,8 @@ public class XsoupTest {
 		Document document = Jsoup.parse(html);
 
 		String result = Xsoup.select(document, "//div[contains(@id,'te')]").get();
-        assertThat(result).isEqualTo("<div id=\"test\">\n" +
-                " aaa\n" +
-                " <div>\n" +
-                "  <a href=\"https://github.com\">github.com</a>\n" +
-                " </div>\n" +
-                "</div>");
+		assertThat(result).isEqualTo("<div id=\"test\">\n" + " aaa\n" + " <div>\n"
+				+ "  <a href=\"https://github.com\">github.com</a>\n" + " </div>\n" + "</div>");
 
 	}
 
@@ -279,10 +257,16 @@ public class XsoupTest {
 
 		String html = "<html><div id='year'>2016</div><div class='month' id='month'>05</div><div class='day' id='day'>15</div></html>";
 		String xPathDate = "concat(//*[@id='year']/text(), '\\/', //*[@id='month']/text(), '\\/',//*[@id='day']/text())";
-		Document document  = Jsoup.parse(html);
+		Document document = Jsoup.parse(html);
 		String result = Xsoup.select(document, xPathDate).get();
-		
+
 		assertThat(result).isEqualTo("2016/05/15");
+
+		xPathDate = "concat(//*[@id='year']/text(), '\\.', //*[@id='month']/text(), '\\.',//*[@id='day']/text())";
+		document = Jsoup.parse(html);
+		result = Xsoup.select(document, xPathDate).get();
+
+		assertThat(result).isEqualTo("2016.05.15");
 
 	}
 
